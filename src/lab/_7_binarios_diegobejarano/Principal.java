@@ -4,10 +4,17 @@
  */
 package lab._7_binarios_diegobejarano;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -81,12 +88,12 @@ public class Principal extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lbl_portada = new javax.swing.JLabel();
         lbl_nombrecancion = new javax.swing.JLabel();
         lbl_nombreartista = new javax.swing.JLabel();
         lbl_nombregenero = new javax.swing.JLabel();
         lbl_intduracion = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        pb_progreso = new javax.swing.JProgressBar();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -112,7 +119,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jcb_genero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcb_genero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rap", "Bachata", "Pop", "Baladas", "Rock" }));
 
         lbl_archivoaudio.setText("sin seleccionar...");
 
@@ -228,6 +235,11 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jl_lista);
 
         jButton1.setText("Seleccionar");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -235,6 +247,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jButton2.setText("Eliminar");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -262,7 +279,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Lista", jPanel2);
 
-        jLabel1.setText("Portada");
+        lbl_portada.setText("Portada");
 
         lbl_nombrecancion.setText("jLabel2");
 
@@ -273,10 +290,25 @@ public class Principal extends javax.swing.JFrame {
         lbl_intduracion.setText("jLabel2");
 
         jButton3.setText("Play");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         jButton4.setText("Pause");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
 
         jButton5.setText("Stop");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
 
         lbl_estado.setText("jLabel2");
 
@@ -295,43 +327,44 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jButton5)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbl_portada, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbl_intduracion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_nombregenero, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_nombreartista, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_nombrecancion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(247, 247, 247))))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lbl_nombrecancion, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                                .addComponent(lbl_nombreartista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbl_nombregenero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbl_intduracion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbl_estado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(pb_progreso, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(131, 131, 131))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addComponent(lbl_nombrecancion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_nombreartista)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbl_nombregenero))
+                        .addComponent(lbl_nombreartista))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel1)))
+                        .addGap(29, 29, 29)
+                        .addComponent(lbl_portada)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_nombregenero)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbl_intduracion)
                 .addGap(12, 12, 12)
                 .addComponent(lbl_estado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pb_progreso, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Reproduccion", jPanel3);
@@ -449,6 +482,167 @@ public class Principal extends javax.swing.JFrame {
        jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_btn_agregarcancionMouseClicked
 
+    private void detenerReproduccion(){
+        if(timerProgreso != null){
+            timerProgreso.stop();
+        }
+        if(clipActual != null){
+            clipActual.stop();
+            clipActual.setMicrosecondPosition(0);
+            clipActual.close();
+            clipActual = null;
+        }
+        pausado = false;
+        Pausa = 0;
+    }
+    private void iniciarTimerProgreso(){
+        if(timerProgreso != null){
+            timerProgreso.stop();
+        }
+        timerProgreso = new javax.swing.Timer(500, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+               if(clipActual != null && clipActual.isOpen() && clipActual.getMicrosecondLength() > 0){
+                   long pos = clipActual.getMicrosecondPosition();
+                   long total = clipActual.getMicrosecondLength();
+                   int porcentaje = (int)((pos*100)/total);
+               }
+            }
+        });
+        timerProgreso.start();
+    }
+    
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        int indice = jl_lista.getSelectedIndex();
+        if(indice == -1){
+            JOptionPane.showMessageDialog(this, "Selecciona una cancion de la lista.","Sin seleccion",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        cancionActual = listaReproduccion.get(indice);
+        
+        lbl_nombrecancion.setText(cancionActual.getNombre());
+        lbl_nombreartista.setText("Artista: "+ cancionActual.getArtista());
+        lbl_nombregenero.setText("Genero: "+ cancionActual.getGenero());
+        lbl_intduracion.setText("Duracion: "+ cancionActual.getDuracion());
+        
+        if(cancionActual.getImagen() != null){
+            try {
+                java.io.ByteArrayInputStream bais = new  java.io.ByteArrayInputStream(cancionActual.getImagen());
+                java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(bais);
+                java.awt.Image scaled = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+                lbl_portada.setIcon(new ImageIcon(scaled));
+                lbl_portada.setText("");
+            } catch (Exception e) {
+                lbl_portada.setText(null);
+                lbl_portada.setText("[ Sin Imagen]");
+            }
+        }else{
+            lbl_portada.setIcon(null);
+            lbl_portada.setText("[ Sin Imagen]");
+        }
+        
+        detenerReproduccion();
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+      int indice = jl_lista.getSelectedIndex();
+        if(indice == -1){
+            JOptionPane.showMessageDialog(this, "Selecciona una cancion para eliminar.","Sin seleccion",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        Cancion aEliminar = listaReproduccion.get(indice);
+        int confirmar = JOptionPane.showConfirmDialog(this, "DeseA Eliminar: "+ aEliminar.getNombre() + "?", "Confirmar Eliminacion", JOptionPane.YES_NO_OPTION);
+        
+        if(confirmar == JOptionPane.YES_OPTION){
+            if(cancionActual != null && cancionActual.getNombre().equals(aEliminar.getNombre())){
+                 detenerReproduccion();
+                 cancionActual = null;
+                 lbl_nombrecancion.setText("Sin cancion seleccionada");
+        lbl_nombreartista.setText("Artista: -");
+        lbl_nombregenero.setText("Genero: -");
+        lbl_intduracion.setText("Duracion: -");
+        lbl_portada.setIcon(null);
+        lbl_portada.setText("[ Imagen ]");
+        lbl_estado.setText("Estado: Detenido");
+        
+        
+            }
+            listaReproduccion.remove(indice);
+            modeloLista.remove(indice);
+            GestordeArchivos.guardarLista(listaReproduccion);
+        }
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        if(cancionActual == null){
+             JOptionPane.showMessageDialog(this, "Ve a lista, selecciona una cancion y presiona seleccionar.","Sin cancion",JOptionPane.INFORMATION_MESSAGE);
+             return;
+            
+        }
+        try {
+            if(pausado && clipActual != null){
+                clipActual.setMicrosecondPosition(Pausa);
+                clipActual.start();
+                pausado = false;
+                lbl_estado.setText("Estado: Reproduciendo -"+ cancionActual.getNombre());
+                iniciarTimerProgreso();
+                return;
+            }
+            detenerReproduccion();
+                    File audioFile = new File(cancionActual.getArchivo());
+                    if(!audioFile.exists()){
+                        JOptionPane.showMessageDialog(this, "NO se encontro el archivo de audio.","Archivo no encontrado",JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    AudioInputStream ais = AudioSystem.getAudioInputStream(audioFile);
+                    clipActual = AudioSystem.getClip();
+                    clipActual.open(ais);
+                    clipActual.start();
+                    pausado = false;
+                    Pausa = 0;
+                    lbl_estado.setText("Estado: Reproduciendo - "+ cancionActual.getNombre());
+                    iniciarTimerProgreso();
+                    clipActual.addLineListener(new LineListener(){
+                        public void update(LineEvent event){
+                            if(event.getType() == LineEvent.Type.STOP && !pausado){
+                                javax.swing.SwingUtilities.invokeLater(new Runnable(){
+                                    public void run(){
+                                        if(clipActual != null && !clipActual.isRunning()){
+                                            pb_progreso.setValue(0);
+                                            lbl_estado.setText("Estado: Detenido");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+        } catch (UnsupportedAudioFileException e) {
+            JOptionPane.showMessageDialog(this, "Formato no soportado","error formato",JOptionPane.ERROR_MESSAGE);
+            
+        }catch(Exception e){
+              JOptionPane.showMessageDialog(this, "Error al reproducir"+ e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        if(clipActual != null && clipActual.isRunning()){
+            Pausa = clipActual.getMicrosecondPosition();
+            clipActual.stop();
+            pausado = true;
+            if(timerProgreso != null){
+                timerProgreso.stop();
+            }
+            lbl_estado.setText("Estadp: Pausado");
+        }
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+       detenerReproduccion();
+        lbl_estado.setText("Estadp: Detenido");
+        pb_progreso.setValue(0);
+    }//GEN-LAST:event_jButton5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -493,11 +687,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JComboBox<String> jcb_genero;
@@ -515,6 +707,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_nombreartista;
     private javax.swing.JLabel lbl_nombrecancion;
     private javax.swing.JLabel lbl_nombregenero;
+    private javax.swing.JLabel lbl_portada;
+    private javax.swing.JProgressBar pb_progreso;
     private javax.swing.JTextField txt_artista;
     private javax.swing.JTextField txt_duracion;
     private javax.swing.JTextField txt_nombre;
