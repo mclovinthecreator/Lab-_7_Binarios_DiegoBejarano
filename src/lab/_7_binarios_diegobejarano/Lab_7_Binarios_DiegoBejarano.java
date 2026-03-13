@@ -4,6 +4,8 @@
  */
 package lab._7_binarios_diegobejarano;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author diego
@@ -14,7 +16,12 @@ public class Lab_7_Binarios_DiegoBejarano {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                new Principal().setVisible(true);
+            }
+        });
     }
     
 }

@@ -4,17 +4,49 @@
  */
 package lab._7_binarios_diegobejarano;
 
+import java.io.File;
+import java.util.ArrayList;
+import javax.sound.sampled.Clip;
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author diego
  */
 public class Principal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principal
-     */
+    //logica que yo escribi
+    private ArrayList<Cancion> listaReproduccion;
+    private DefaultListModel modeloLista;
+
+    private Clip clipActual;
+    private Cancion cancionActual;
+    private boolean pausado = false;
+    private long Pausa = 0;
+
+    private javax.swing.Timer timerProgreso;
+
     public Principal() {
         initComponents();
+
+        modeloLista = new DefaultListModel();
+        jl_lista.setModel(modeloLista);
+        jl_lista.setCellRenderer(new CancionCellRenderer());
+        jl_lista.setFixedCellHeight(50);
+
+        listaReproduccion = GestordeArchivos.cargarlista();
+        for (int i = 0; i < listaReproduccion.size(); i++) {
+            modeloLista.addElement(listaReproduccion.get(i));
+        }
+
+        lbl_nombrecancion.setText("Sin cancion Seleccionada");
+        lbl_nombreartista.setText("Artista: -");
+        lbl_nombregenero.setText("Genero: -");
+        lbl_intduracion.setText("Duracion: -");
+        lbl_estado.setText("Estado: Detenido");
     }
 
     /**
@@ -26,21 +58,396 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        lbl_nombre = new javax.swing.JLabel();
+        lbl_artista = new javax.swing.JLabel();
+        lbl_duracion = new javax.swing.JLabel();
+        lbl_genero = new javax.swing.JLabel();
+        lbl_audio = new javax.swing.JLabel();
+        lbl_imagen = new javax.swing.JLabel();
+        txt_nombre = new javax.swing.JTextField();
+        txt_artista = new javax.swing.JTextField();
+        txt_duracion = new javax.swing.JTextField();
+        jcb_genero = new javax.swing.JComboBox<>();
+        lbl_archivoaudio = new javax.swing.JLabel();
+        lbl_archivoimagen = new javax.swing.JLabel();
+        btn_audio = new javax.swing.JButton();
+        btn_imagen = new javax.swing.JButton();
+        btn_agregarcancion = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jl_lista = new javax.swing.JList<>();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lbl_nombrecancion = new javax.swing.JLabel();
+        lbl_nombreartista = new javax.swing.JLabel();
+        lbl_nombregenero = new javax.swing.JLabel();
+        lbl_intduracion = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        lbl_estado = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lbl_nombre.setText("Nombre:");
+
+        lbl_artista.setText("Artista:");
+
+        lbl_duracion.setText("Duracion:");
+
+        lbl_genero.setText("Genero:");
+
+        lbl_audio.setText("Audio:");
+
+        lbl_imagen.setText("Imagen:");
+
+        txt_duracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_duracionActionPerformed(evt);
+            }
+        });
+
+        jcb_genero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lbl_archivoaudio.setText("sin seleccionar...");
+
+        lbl_archivoimagen.setText("sin seleccionar...");
+
+        btn_audio.setText("Buscar");
+        btn_audio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_audioMouseClicked(evt);
+            }
+        });
+
+        btn_imagen.setText("Buscar");
+        btn_imagen.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_imagenMouseClicked(evt);
+            }
+        });
+        btn_imagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_imagenActionPerformed(evt);
+            }
+        });
+
+        btn_agregarcancion.setText("Agregar Cancion");
+        btn_agregarcancion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_agregarcancionMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_artista, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_artista))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_duracion, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_duracion, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_genero, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcb_genero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_audio, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbl_archivoaudio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_audio))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_imagen, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_agregarcancion)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_archivoimagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_imagen)))))
+                .addContainerGap(258, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_nombre)
+                    .addComponent(txt_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_artista)
+                    .addComponent(txt_artista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_duracion)
+                    .addComponent(txt_duracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_genero)
+                    .addComponent(jcb_genero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_audio)
+                    .addComponent(lbl_archivoaudio)
+                    .addComponent(btn_audio))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_imagen)
+                    .addComponent(lbl_archivoimagen)
+                    .addComponent(btn_imagen))
+                .addGap(18, 18, 18)
+                .addComponent(btn_agregarcancion)
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Agregar", jPanel1);
+
+        jl_lista.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jl_lista);
+
+        jButton1.setText("Seleccionar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Eliminar");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addContainerGap(365, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Lista", jPanel2);
+
+        jLabel1.setText("Portada");
+
+        lbl_nombrecancion.setText("jLabel2");
+
+        lbl_nombreartista.setText("jLabel2");
+
+        lbl_nombregenero.setText("jLabel2");
+
+        lbl_intduracion.setText("jLabel2");
+
+        jButton3.setText("Play");
+
+        jButton4.setText("Pause");
+
+        jButton5.setText("Stop");
+
+        lbl_estado.setText("jLabel2");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(57, 57, 57)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_intduracion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_nombregenero, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_nombreartista, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_nombrecancion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(247, 247, 247))))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(lbl_nombrecancion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_nombreartista)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lbl_nombregenero))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_intduracion)
+                .addGap(12, 12, 12)
+                .addComponent(lbl_estado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(66, 66, 66)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
+                .addContainerGap(120, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Reproduccion", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txt_duracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_duracionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_duracionActionPerformed
+
+    private void btn_imagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_imagenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_imagenActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btn_audioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_audioMouseClicked
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Seleccionar archivo de audio");
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(
+                "Archivos de Audio (*.wav, *.mp3, *.aac, *.flac, *.ogg, *.wma, *.m4a)",
+                "wav", "mp3", "aac", "flac", "ogg", "wma", "m4a");
+        fc.setFileFilter(filtro);
+        int resultado = fc.showOpenDialog(this);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivo = fc.getSelectedFile();
+            lbl_archivoaudio.setText(archivo.getAbsolutePath());
+            if (txt_nombre.getText().isEmpty()) {
+                String nombreSinExt = archivo.getName().replaceAll("\\.[^.]+$", "");
+                txt_nombre.setText(nombreSinExt);
+            }
+        }
+    }//GEN-LAST:event_btn_audioMouseClicked
+
+    private void btn_imagenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_imagenMouseClicked
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("seleccionar imagen del album");
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes (*.jpg, *.png)", "jpg", "jpeg", "png");
+        fc.setFileFilter(filtro);
+        int resultado = fc.showOpenDialog(this);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivo = fc.getSelectedFile();
+            lbl_archivoimagen.setText(archivo.getAbsolutePath());
+        }
+    }//GEN-LAST:event_btn_imagenMouseClicked
+
+    public String obtenerduracion(String duracion){
+        if(duracion == null){
+            return "0:00";
+        }
+         if(duracion.equals("")){
+            return "0:00";
+        }
+          if(duracion.trim().equals("")){
+            return "0:00";
+        }
+          return duracion;
+    }
+    
+    private void btn_agregarcancionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_agregarcancionMouseClicked
+        String nombre = txt_nombre.getText().trim();
+        String artista = txt_artista.getText().trim();
+        String duracion = txt_duracion.getText().trim();
+        String genero = jcb_genero.getSelectedItem().toString();
+        String rutaAudio = lbl_archivoaudio.getText();
+        String rutaImagen = lbl_archivoimagen.getText();
+
+        if (nombre.isEmpty() || artista.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre y el artista son obligatorios.", "Campos requeridos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (rutaAudio.equals("sin seleccionar...")) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un archivo de audio", "Audio requerido", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        byte[] imagenBytes = null;
+        if(!rutaImagen.equals("sin seleccionar...")){
+            File archivoimg = new File(rutaImagen);
+            imagenBytes = GestordeArchivos.leerimagen(archivoimg);
+        }
+        
+        Cancion nuevacancion = new Cancion(nombre,artista,obtenerduracion(duracion),genero,rutaAudio,imagenBytes);
+       listaReproduccion.add(nuevacancion);
+       modeloLista.addElement(nuevacancion);
+       GestordeArchivos.guardarLista(listaReproduccion);
+       
+       JOptionPane.showMessageDialog(this, "Cancion agregada correctamente!","exito",JOptionPane.INFORMATION_MESSAGE);
+       
+       txt_nombre.setText("");
+       txt_artista.setText("");
+       txt_duracion.setText("");
+       lbl_archivoaudio.setText("sin seleccionar...");
+       lbl_archivoimagen.setText("sin seleccionar...");
+       jTabbedPane1.setSelectedIndex(1);
+    }//GEN-LAST:event_btn_agregarcancionMouseClicked
 
     /**
      * @param args the command line arguments
@@ -78,5 +485,38 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_agregarcancion;
+    private javax.swing.JButton btn_audio;
+    private javax.swing.JButton btn_imagen;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JComboBox<String> jcb_genero;
+    private javax.swing.JList<String> jl_lista;
+    private javax.swing.JLabel lbl_archivoaudio;
+    private javax.swing.JLabel lbl_archivoimagen;
+    private javax.swing.JLabel lbl_artista;
+    private javax.swing.JLabel lbl_audio;
+    private javax.swing.JLabel lbl_duracion;
+    private javax.swing.JLabel lbl_estado;
+    private javax.swing.JLabel lbl_genero;
+    private javax.swing.JLabel lbl_imagen;
+    private javax.swing.JLabel lbl_intduracion;
+    private javax.swing.JLabel lbl_nombre;
+    private javax.swing.JLabel lbl_nombreartista;
+    private javax.swing.JLabel lbl_nombrecancion;
+    private javax.swing.JLabel lbl_nombregenero;
+    private javax.swing.JTextField txt_artista;
+    private javax.swing.JTextField txt_duracion;
+    private javax.swing.JTextField txt_nombre;
     // End of variables declaration//GEN-END:variables
 }
